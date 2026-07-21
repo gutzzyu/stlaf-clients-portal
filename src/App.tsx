@@ -338,7 +338,7 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   
-  const isAdmin = user?.email === 'andrewmanuel310@gmail.com' || user?.email === 'stlaf.legal08@gmail.com';
+  const isAdmin = user?.email === 'andrewmanuel310@gmail.com' || user?.email === 'stlaf.legal08@gmail.com' || user?.email === 'stlaf.08@gmail.com';
 
   const [showAdminSettings, setShowAdminSettings] = useState<boolean>(false);
 
@@ -525,7 +525,7 @@ export default function App() {
       (user) => {
         setUser(user);
         setNeedsAuth(false);
-        if (user?.email === 'andrewmanuel310@gmail.com' || user?.email === 'stlaf.legal08@gmail.com') {
+        if (user?.email === 'andrewmanuel310@gmail.com' || user?.email === 'stlaf.legal08@gmail.com' || user?.email === 'stlaf.08@gmail.com') {
           if (!localStorage.getItem('matterSpreadsheetId')) {
             setShowAdminSettings(true);
           }
