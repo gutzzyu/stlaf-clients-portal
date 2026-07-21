@@ -6,6 +6,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ prompt: 'select_account consent' });
 provider.addScope('https://www.googleapis.com/auth/spreadsheets');
 provider.addScope('https://www.googleapis.com/auth/gmail.send');
 provider.addScope('https://www.googleapis.com/auth/documents');

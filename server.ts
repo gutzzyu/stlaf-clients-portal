@@ -10,7 +10,10 @@ const app = express();
 
 // Robust body parsing middleware that avoids conflicting with Vercel's built-in parser
 app.use((req, res, next) => {
-  if (process.env.VERCEL && req.body && typeof req.body === 'object' && Object.keys(req.body).length > 0) {
+  if (req.body) {
+    if (typeof req.body === 'string') {
+      try { req.body = JSON.parse(req.body); } catch (e) {}
+    }
     return next();
   }
   express.json({ limit: '50mb' })(req, res, next);
@@ -120,7 +123,7 @@ LegalFlow Architect Group
   // API Route to draft the proposal using Gemini 2.5 Flash
   app.post('/api/draft-proposal', async (req, res) => {
     try {
-      const { formData, matterId } = req.body;
+      const { formData, matterId } = req.body || {};
 
       if (!formData || !matterId) {
         return res.status(400).json({ error: 'Missing required fields (formData or matterId)' });
@@ -225,7 +228,7 @@ Please generate a formal, well-formatted, and authoritative legal consultation p
       if (!authHeader) {
         return res.status(401).json({ error: 'Missing Authorization header' });
       }
-      const { raw } = req.body;
+      const { raw } = req.body || {};
 
       const response = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
         method: 'POST',
@@ -256,7 +259,7 @@ Please generate a formal, well-formatted, and authoritative legal consultation p
       if (!authHeader) {
         return res.status(401).json({ error: 'Missing Authorization header' });
       }
-      const { spreadsheetId, sheetName, values } = req.body;
+      const { spreadsheetId, sheetName, values } = req.body || {};
 
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}:append?valueInputOption=USER_ENTERED`;
       const response = await fetch(url, {
@@ -288,7 +291,7 @@ Please generate a formal, well-formatted, and authoritative legal consultation p
       if (!authHeader) {
         return res.status(401).json({ error: 'Missing Authorization header' });
       }
-      const { title } = req.body;
+      const { title } = req.body || {};
 
       const url = 'https://sheets.googleapis.com/v4/spreadsheets';
       const response = await fetch(url, {
@@ -322,7 +325,7 @@ Please generate a formal, well-formatted, and authoritative legal consultation p
       if (!authHeader) {
         return res.status(401).json({ error: 'Missing Authorization header' });
       }
-      const { title, text } = req.body;
+      const { title, text } = req.body || {};
 
       // 1. Create the empty Google Doc
       const createResponse = await fetch('https://docs.googleapis.com/v1/documents', {
@@ -382,7 +385,7 @@ Please generate a formal, well-formatted, and authoritative legal consultation p
       if (!authHeader) {
         return res.status(401).json({ error: 'Missing Authorization header' });
       }
-      const { fileId, name } = req.body;
+      const { fileId, name } = req.body || {};
       if (!fileId) {
         return res.status(400).json({ error: 'Missing required field: fileId' });
       }
@@ -419,7 +422,7 @@ Please generate a formal, well-formatted, and authoritative legal consultation p
       if (!authHeader) {
         return res.status(401).json({ error: 'Missing Authorization header' });
       }
-      const { fileId } = req.body;
+      const { fileId } = req.body || {};
       if (!fileId) {
         return res.status(400).json({ error: 'Missing required field: fileId' });
       }
@@ -453,7 +456,7 @@ Please generate a formal, well-formatted, and authoritative legal consultation p
       if (!authHeader) {
         return res.status(401).json({ error: 'Missing Authorization header' });
       }
-      const { documentId, requests } = req.body;
+      const { documentId, requests } = req.body || {};
       if (!documentId || !requests) {
         return res.status(400).json({ error: 'Missing required fields: documentId or requests' });
       }
@@ -488,7 +491,7 @@ Please generate a formal, well-formatted, and authoritative legal consultation p
       if (!authHeader) {
         return res.status(401).json({ error: 'Missing Authorization header' });
       }
-      const { fileId, emailAddress, role } = req.body;
+      const { fileId, emailAddress, role } = req.body || {};
 
       const url = `https://www.googleapis.com/drive/v3/files/${fileId}/permissions`;
       const response = await fetch(url, {
@@ -524,7 +527,7 @@ Please generate a formal, well-formatted, and authoritative legal consultation p
       if (!authHeader) {
         return res.status(401).json({ error: 'Missing Authorization header' });
       }
-      const { name, mimeType, base64Data } = req.body;
+      const { name, mimeType, base64Data } = req.body || {};
       if (!name || !mimeType || !base64Data) {
         return res.status(400).json({ error: 'Missing required parameters: name, mimeType, or base64Data' });
       }

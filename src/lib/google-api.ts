@@ -45,7 +45,7 @@ export const appendToSheet = async (spreadsheetId: string, sheetName: string, va
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(`Failed to append to sheet: ${errorData.error?.message || response.statusText}`);
+    throw new Error(`Failed to append to sheet: ${(typeof errorData.error === 'string' ? errorData.error : errorData.error?.message) || response.statusText}`);
   }
 
   return response.json();
@@ -66,7 +66,7 @@ export const createSpreadsheet = async (title: string) => {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(`Failed to create spreadsheet: ${errorData.error?.message || response.statusText}`);
+    throw new Error(`Failed to create spreadsheet: ${(typeof errorData.error === 'string' ? errorData.error : errorData.error?.message) || response.statusText}`);
   }
 
   return response.json();
@@ -88,7 +88,7 @@ export const createDocument = async (title: string, text: string) => {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(`Failed to create Google Doc: ${errorData.error?.message || response.statusText}`);
+    throw new Error(`Failed to create Google Doc: ${(typeof errorData.error === 'string' ? errorData.error : errorData.error?.message) || response.statusText}`);
   }
 
   return response.json();
@@ -110,7 +110,7 @@ export const shareFileInDrive = async (fileId: string, emailAddress: string, rol
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(`Failed to share Google Drive file: ${errorData.error?.message || response.statusText}`);
+    throw new Error(`Failed to share Google Drive file: ${(typeof errorData.error === 'string' ? errorData.error : errorData.error?.message) || response.statusText}`);
   }
 
   return response.json();
@@ -132,7 +132,7 @@ export const uploadFileToDrive = async (name: string, mimeType: string, base64Da
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(`Failed to upload file to Google Drive: ${errorData.error || errorData.error?.message || response.statusText}`);
+    throw new Error(`Failed to upload file to Google Drive: ${errorData.error || (typeof errorData.error === 'string' ? errorData.error : errorData.error?.message) || response.statusText}`);
   }
 
   return response.json();
@@ -169,7 +169,7 @@ export const sendEmail = async (to: string, subject: string, bodyText: string) =
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(`Failed to send email: ${errorData.error?.message || response.statusText}`);
+    throw new Error(`Failed to send email: ${(typeof errorData.error === 'string' ? errorData.error : errorData.error?.message) || response.statusText}`);
   }
 
   return response.json();
@@ -191,7 +191,7 @@ export const copyDriveFile = async (fileId: string, name: string) => {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(`Failed to copy template document: ${errorData.error?.message || response.statusText}`);
+    throw new Error(`Failed to copy template document: ${(typeof errorData.error === 'string' ? errorData.error : errorData.error?.message) || response.statusText}`);
   }
 
   return response.json();
@@ -213,7 +213,8 @@ export const verifyDriveFileAccess = async (fileId: string) => {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error?.message || response.statusText || 'File not found or no permission');
+    const errorMsg = typeof errorData.error === 'string' ? errorData.error : errorData.error?.message;
+    throw new Error(errorMsg || response.statusText || 'File not found or no permission');
   }
 
   return response.json();
@@ -235,7 +236,7 @@ export const batchUpdateDocument = async (documentId: string, requests: any[]) =
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(`Failed to update template document placeholders: ${errorData.error?.message || response.statusText}`);
+    throw new Error(`Failed to update template document placeholders: ${(typeof errorData.error === 'string' ? errorData.error : errorData.error?.message) || response.statusText}`);
   }
 
   return response.json();
