@@ -1,0 +1,6 @@
+{
+  "name": "STLAF | Legal Intake Automation",
+  "description": "A high-speed legal intake workflow to log client data and draft proposals using Gemini 2.5 Flash, Google Sheets, and Gmail.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
