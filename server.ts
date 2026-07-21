@@ -7,7 +7,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-app.use(express.json({ limit: '50mb' }));
+
+// Robust body parsing middleware that avoids conflicting with Vercel's built-in parser
+app.use((req, res, next) => {
+  if (process.env.VERCEL && req.body && typeof req.body === 'object' && Object.keys(req.body).length > 0) {
+    return next();
+  }
+  express.json({ limit: '50mb' })(req, res, next);
+});
 
   // CORS Middleware for cross-origin requests (e.g. from sandboxed or iframe preview origins)
   app.use((req, res, next) => {
