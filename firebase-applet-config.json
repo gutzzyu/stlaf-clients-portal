@@ -1,11 +1,11 @@
 {
-  "projectId": "aesthetic-day-jv8b6",
-  "appId": "1:896367189203:web:cf54328b4b0446d8834826",
-  "apiKey": "AIzaSyAKjnLrMSiTuU8STh5MhainA3gDymH-BlU",
-  "authDomain": "aesthetic-day-jv8b6.firebaseapp.com",
-  "storageBucket": "aesthetic-day-jv8b6.firebasestorage.app",
-  "messagingSenderId": "896367189203",
-  "measurementId": "",
+  "projectId": "stlaf-clients-portal",
+  "appId": "1:573499055578:web:ab1510a1364b8c6c0eb4e3",
+  "apiKey": "AIzaSyACOP-g83Yy-IOtuX_EdpP6K-0BMZZrndY",
+  "authDomain": "stlaf-clients-portal.firebaseapp.com",
+  "storageBucket": "stlaf-clients-portal.firebasestorage.app",
+  "messagingSenderId": "573499055578",
+  "measurementId": "G-X8XD7FFZZP",
   "oAuthClientId": "896367189203-3sulu69nnlp7mbov4o9gfm9ermo78sl4.apps.googleusercontent.com",
   "recaptchaSiteKey": ""
 }

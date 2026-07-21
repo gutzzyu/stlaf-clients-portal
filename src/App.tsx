@@ -839,7 +839,7 @@ export default function App() {
                 const firstLinePrefix = `       ${index + 1}.  `;
                 const subsequentLinePrefix = " ".repeat(firstLinePrefix.length);
                 return wrapAndAlignText(desc, firstLinePrefix, subsequentLinePrefix);
-              }).join('\n\n');
+              }).join('\n\n') + '\n\n';
           }
           const regex = new RegExp(`{{${key}}}`, 'g');
           filledDocText = filledDocText.replace(regex, replacement);
@@ -907,19 +907,36 @@ export default function App() {
                 const key = CATEGORY_PLACEHOLDERS[cat.name];
                 if (key) {
                   const selectedInCat = cat.services.filter(s => formData.servicesSelected.includes(s));
-                  let replacementVal = '';
+                  
+                  let titleVal = '';
+                  let listOnlyVal = '';
+                  let combinedVal = '';
+
                   if (selectedInCat.length > 0) {
                     const phaseNum = categoryPhaseNumbers[cat.name];
                     const phaseRoman = getRomanNumeral(phaseNum);
-                    replacementVal = `PHASE ${phaseRoman}. ${cat.name}\n` + 
-                      selectedInCat.map((s, index) => {
-                        const desc = SERVICE_PREGENERATED_DESCRIPTIONS[s] || 'No description available.';
-                        const firstLinePrefix = `       ${index + 1}.  `;
-                        const subsequentLinePrefix = " ".repeat(firstLinePrefix.length);
-                        return wrapAndAlignText(desc, firstLinePrefix, subsequentLinePrefix);
-                      }).join('\n\n');
+                    
+                    titleVal = `PHASE ${phaseRoman}. ${cat.name}\n`;
+                    listOnlyVal = selectedInCat.map((s, index) => {
+                      const desc = SERVICE_PREGENERATED_DESCRIPTIONS[s] || 'No description available.';
+                      const firstLinePrefix = `       ${index + 1}.  `;
+                      const subsequentLinePrefix = " ".repeat(firstLinePrefix.length);
+                      return wrapAndAlignText(desc, firstLinePrefix, subsequentLinePrefix);
+                    }).join('\n\n') + '\n\n';
+
+                    combinedVal = titleVal + listOnlyVal;
                   }
-                  replacements.push({ placeholder: `{{${key}}}`, value: replacementVal });
+
+                  const cleanKeyName = key.replace('SERVICES_', '');
+                  
+                  // 1. Title only placeholder, e.g. {{TITLE_SEC_CORPORATE}} (can be styled as BOLD in template)
+                  replacements.push({ placeholder: `{{TITLE_${cleanKeyName}}}`, value: titleVal });
+                  
+                  // 2. List only placeholder, e.g. {{LIST_SEC_CORPORATE}} (can be styled as REGULAR/NON-BOLD in template)
+                  replacements.push({ placeholder: `{{LIST_${cleanKeyName}}}`, value: listOnlyVal });
+
+                  // 3. Combined placeholder, e.g. {{SERVICES_SEC_CORPORATE}} (for backward-compatibility)
+                  replacements.push({ placeholder: `{{${key}}}`, value: combinedVal });
                 }
               });
 
@@ -1371,7 +1388,15 @@ STLAF Intake Automation System`;
 
                 <div>
                   <h3 className="font-semibold text-slate-700 mb-1">Service Categories (Phase Lists)</h3>
-                  <p className="text-[10px] text-slate-400 mb-1.5">Inserts the formatted Phase Title (e.g. <strong>PHASE I. SEC &amp; Corporate Governance</strong>) along with a beautifully structured, numbered list of professional descriptions of each checked service in that category (or blank if none are selected).</p>
+                  <div className="bg-amber-50 border border-amber-200 rounded p-2.5 mb-2 text-[10px] text-amber-800 space-y-1.5 leading-normal">
+                    <p className="font-semibold">💡 PRO TIP FOR PERFECT FORMATTING & NO BOLD LISTS:</p>
+                    <p>To keep the numbered lists <strong>not in bold</strong> and prevent unselected categories from leaving blank spaces, we support <strong>Split Placeholders</strong>. In your Google Doc template, place the title and list placeholders on adjacent lines with <strong>no blank line in between</strong>, like this:</p>
+                    <pre className="bg-white border border-amber-200 p-1 rounded text-[9px] font-mono select-all">
+&#123;&#123;TITLE_SEC_CORPORATE&#125;&#125;&#123;&#123;LIST_SEC_CORPORATE&#125;&#125;&#123;&#123;TITLE_COMPLIANCE&#125;&#125;&#123;&#123;LIST_COMPLIANCE&#125;&#125;
+                    </pre>
+                    <p>Style the <code className="bg-white px-0.5 rounded">&#123;&#123;TITLE_...&#125;&#125;</code> placeholder as <strong>Bold</strong>, and style the <code className="bg-white px-0.5 rounded">&#123;&#123;LIST_...&#125;&#125;</code> placeholder as <strong>Regular (not bold)</strong>. Active categories will automatically append their own trailing line breaks, and empty ones will leave behind absolutely no vertical whitespace!</p>
+                  </div>
+                  <p className="text-[10px] text-slate-400 mb-1.5">Click any placeholder to copy to your clipboard (you can use combined format, or split format with TITLE and LIST):</p>
                   <div className="space-y-1 font-mono text-[9px] text-slate-600">
                     <button 
                       type="button"
